@@ -1,36 +1,72 @@
-import { useSearchParams } from 'react-router-dom'
-import { FileJson, Terminal, Hammer } from 'lucide-react'
-import { Sidebar } from '../components/Sidebar'
+import { useSearchParams } from "react-router-dom";
+import { FileJson, Terminal, Hammer } from "lucide-react";
+import { Sidebar } from "../components/Sidebar";
+import { useState, useEffect } from "react";
+import { PostList } from "../components/posts/PostList";
+import { usePosts } from "../shared/hooks/usePost";
 
 export const DashboardPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const selectedCourse = searchParams.get('course') || 'all';
-  const dateFilter = searchParams.get('date') || 'all';
-
+  const [expandedPost, setExpandedPost] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const selectedCourse = searchParams.get("course") || "all";
+  const dateFilter = searchParams.get("date") || "all";
+  const { getPosts } = usePosts();
   const setSelectedCourse = (course) => {
-    searchParams.set('course', course);
+    searchParams.set("course", course);
     setSearchParams(searchParams);
   };
 
   const setDateFilter = (date) => {
-    searchParams.set('date', date);
+    searchParams.set("date", date);
     setSearchParams(searchParams);
   };
 
+  const fetchData = async () => {
+    const PostsFromApi = await getPosts();
+    if (PostsFromApi) {
+      setPosts(PostsFromApi);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const courses = [
-    { id: 'tech', name: 'Tecnología', icon: <FileJson className="h-5 w-5" /> },
-    { id: 'workshop', name: 'Taller', icon: <Terminal className="h-5 w-5" /> },
-    { id: 'practice', name: 'Práctica Supervisada', icon: <Hammer className="h-5 w-5" /> }
+    { id: "Tech", name: "Tecnología", icon: <FileJson className="h-5 w-5" /> },
+    { id: "Workshop", name: "Taller", icon: <Terminal className="h-5 w-5" /> },
+    {
+      id: "Practice",
+      name: "Práctica Supervisada",
+      icon: <Hammer className="h-5 w-5" />,
+    },
   ];
+
+  const filteredPosts = posts.filter((post) => {
+    const matchesCourse =
+      selectedCourse === "all" || post.course === selectedCourse;
+
+    const matchesDate = dateFilter === "all" || post.dateType === dateFilter;
+
+    return matchesCourse && matchesDate;
+  });
 
   return (
     <div className="flex h-screen bg-background">
-      <Sidebar 
+      <Sidebar
         selectedCourse={selectedCourse}
         setSelectedCourse={setSelectedCourse}
         dateFilter={dateFilter}
         setDateFilter={setDateFilter}
+        courses={courses}
+      />
+
+      <PostList
+        posts={filteredPosts}
+        expandedPost={expandedPost}
+        setExpandedPost={setExpandedPost}
+        selectedCourse={selectedCourse}
         courses={courses}
       />
     </div>
