@@ -4,6 +4,7 @@ import { Sidebar } from "../components/Sidebar";
 import { useState, useEffect } from "react";
 import { PostList } from "../components/posts/PostList";
 import { usePosts } from "../shared/hooks/usePost";
+import { parseISO, isToday, isThisWeek, isThisMonth } from 'date-fns';
 
 export const DashboardPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,9 +47,19 @@ export const DashboardPage = () => {
   const filteredPosts = posts.filter((post) => {
     const matchesCourse =
       selectedCourse === "all" || post.course === selectedCourse;
-
-    const matchesDate = dateFilter === "all" || post.dateType === dateFilter;
-
+  
+    const postDate = parseISO(post.createdAt);
+  
+    let matchesDate = true;
+  
+    if (dateFilter === "today") {
+      matchesDate = isToday(postDate);
+    } else if (dateFilter === "week") {
+      matchesDate = isThisWeek(postDate, { weekStartsOn: 0 });
+    } else if (dateFilter === "month") {
+      matchesDate = isThisMonth(postDate);
+    }
+  
     return matchesCourse && matchesDate;
   });
 

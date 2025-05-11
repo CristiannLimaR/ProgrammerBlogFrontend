@@ -7,6 +7,7 @@ import { Comment } from "./Comments";
 import { Terminal } from "lucide-react";
 import { usePosts } from "../../shared/hooks/usePost";
 import {useComments} from "../../shared/hooks/useComments";
+import { format, parseISO } from 'date-fns'
 
 export function PostCard({ post, expandedPost, setExpandedPost }) {
   const [likes, setLikes] = useState(post.likes);
@@ -14,8 +15,8 @@ export function PostCard({ post, expandedPost, setExpandedPost }) {
   const [comments, setComments] = useState(post.comments);
   const { giveLike, removeLike } = usePosts();
   const { addComment } = useComments();
-
-
+  const parsedDate = parseISO(post.createdAt);
+  const formatted = format(parsedDate, "dd/MM/yyyy HH:mm")
   const handlePostClick = (e) => {
     if (e.target.closest(".comment-form")) {
       return;
@@ -54,7 +55,7 @@ export function PostCard({ post, expandedPost, setExpandedPost }) {
               ? "Taller"
               : "Práctica"}
           </div>
-          <div className="text-xs text-muted-foreground"></div>
+          <div className="text-xs text-muted-foreground">{formatted}</div>
         </div>
         <Badge variant="outline" className="ml-auto">
           {post.course === "Tech"
