@@ -6,12 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { Comment } from "./Comments";
 import { Terminal } from "lucide-react";
 import { usePosts } from "../../shared/hooks/usePost";
-
+import {useComments} from "../../shared/hooks/useComments";
 
 export function PostCard({ post, expandedPost, setExpandedPost }) {
   const [likes, setLikes] = useState(post.likes);
   const [isLiked, setIsLiked] = useState(false);
+  const [comments, setComments] = useState(post.comments);
   const { giveLike, removeLike } = usePosts();
+  const { addComment } = useComments();
 
 
   const handlePostClick = (e) => {
@@ -28,7 +30,10 @@ export function PostCard({ post, expandedPost, setExpandedPost }) {
     setIsLiked((prevIsLiked) => !prevIsLiked);
   };
 
-
+  const handleSubmitComment = (data) => {
+    addComment(data, post._id);
+    setComments((prevComments) => [...prevComments, { ...data }]);
+  };
 
   return (
     <div
