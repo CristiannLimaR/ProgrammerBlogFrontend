@@ -1,12 +1,12 @@
 import { PostCard } from './PostCard'
 
-export function PostList({ 
+export const PostList = ({ 
   posts, 
   expandedPost, 
   setExpandedPost,
   selectedCourse,
   courses 
-}) {
+}) =>{
   console.log(posts)
   return (
     <div className="flex-1 overflow-y-auto">

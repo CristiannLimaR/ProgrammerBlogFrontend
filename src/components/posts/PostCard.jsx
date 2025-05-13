@@ -9,12 +9,12 @@ import { usePosts } from "../../shared/hooks/usePost";
 import {useComments} from "../../shared/hooks/useComments";
 import { format, parseISO } from 'date-fns'
 
-export function PostCard({ post, expandedPost, setExpandedPost }) {
+export const PostCard = ({ post, expandedPost, setExpandedPost }) => {
   const [likes, setLikes] = useState(post.likes);
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState(post.comments);
   const { giveLike, removeLike } = usePosts();
-  const { addComment } = useComments();
+  const { addComment, updateComment, deleteComment } = useComments();
   const parsedDate = parseISO(post.createdAt);
   const formatted = format(parsedDate, "dd/MM/yyyy HH:mm")
   const handlePostClick = (e) => {
@@ -34,6 +34,24 @@ export function PostCard({ post, expandedPost, setExpandedPost }) {
   const handleSubmitComment = (data) => {
     addComment(data, post._id);
     setComments((prevComments) => [...prevComments, { ...data }]);
+  };
+  
+  const handleUpdateComment = (id, data) => {
+    console.log(data);
+    updateComment(data,id);
+    const updatedComments = comments.map((comment) => {
+      if (comment._id === id) {
+        return { ...comment, ...data };
+      }
+      return comment;
+    });
+    setComments(updatedComments);
+  };
+
+  const handleDeleteComment = (id) => {
+    deleteComment(id);
+    const updatedComments = comments.filter((comment) => comment._id !== id);
+    setComments(updatedComments);
   };
 
   return (
@@ -101,7 +119,7 @@ export function PostCard({ post, expandedPost, setExpandedPost }) {
       </div>
 
       {expandedPost === post._id && (
-        <Comment comments={comments} onSubmitComment={handleSubmitComment} />
+        <Comment comments={comments} onSubmitComment={handleSubmitComment} onUpdateComment={handleUpdateComment} onDeleteComment={handleDeleteComment}/>
       )}
     </div>
   );

@@ -39,12 +39,34 @@ export const removeLike = async (id) => {
 };
 
 export const addComment = async (data, id) => {
-    try {
-        return await apiClient.post(`/comments/publication/${id}`, data);
-      } catch (e) {
-        return {
-          error: true,
-          e,
-        };
-      }
-}
+  try {
+    return await apiClient.post(`/comments/publication/${id}`, data);
+  } catch (e) {
+    return {
+      error: true,
+      e,
+    };
+  }
+};
+
+export const updateComment = async (id, data) => {
+  try {
+    return await apiClient.put(`/comments/${id}`, data);
+  } catch (e) {
+    return {
+      error: true,
+      e,
+    };
+  }
+};
+
+export const deleteComment = async (id) => {
+  try {
+    return await apiClient.delete(`/comments/${id}`);
+  } catch (e) {
+    return {
+      error: true,
+      e,
+    };
+  }
+};

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { PostList } from "../components/posts/PostList";
 import { usePosts } from "../shared/hooks/usePost";
 import { parseISO, isToday, isThisWeek, isThisMonth } from 'date-fns';
+import { Toaster } from "sonner";
 
 export const DashboardPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -65,6 +66,7 @@ export const DashboardPage = () => {
 
   return (
     <div className="flex h-screen bg-background">
+      <Toaster position="top-right" richColors />
       <Sidebar
         selectedCourse={selectedCourse}
         setSelectedCourse={setSelectedCourse}

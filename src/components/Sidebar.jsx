@@ -5,13 +5,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 
-export function Sidebar({ 
+export const Sidebar = ({ 
   selectedCourse, 
   setSelectedCourse, 
   dateFilter, 
   setDateFilter, 
   courses 
-}) {
+}) => {
   return (
     <div className="w-64 border-r flex flex-col p-4">
       <div className="text-xl font-bold mb-8">EduBlog</div>
