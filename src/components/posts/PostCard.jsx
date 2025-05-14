@@ -86,7 +86,10 @@ export const PostCard = ({ post, expandedPost, setExpandedPost }) => {
 
       <h3 className="font-bold text-lg mb-2">{post.title}</h3>
       <p className="text-muted-foreground mb-3">{post.content}</p>
-
+      {post.image && (
+        <img src={post.image} className="w-96 object-cover rounded-lg" alt={post.title} />
+      )}
+      
       <div className="flex items-center space-x-6 text-muted-foreground">
         <Button
           variant="ghost"
