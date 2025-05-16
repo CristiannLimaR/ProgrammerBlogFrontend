@@ -99,7 +99,46 @@ export const Comment = ({
       <CardHeader className="pb-2">
         <CardTitle className="text-base">Comentarios</CardTitle>
       </CardHeader>
+
       <CardContent className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="pt-2 comment-form">
+          <div className="mb-2 flex justify-between items-center">
+            {!isAnonymous && (
+              <Input
+                type="text"
+                placeholder="Tu nombre"
+                className="w-full"
+                {...register("name", { required: !isAnonymous })}
+              />
+            )}
+            <Button
+              variant="outline"
+              className="ml-2"
+              onClick={toggleAnonymous}
+              type="button"
+            >
+              {isAnonymous ? "Usar mi nombre" : "Comentar como Anónimo"}
+            </Button>
+          </div>
+          <div className="mb-2">
+            <Textarea
+              placeholder="Escribe un comentario..."
+              className="w-full resize-none"
+              rows={3}
+              {...register("comment", { required: true })}
+            />
+          </div>
+          <div className="text-right space-x-2">
+            {editingIndex !== null && (
+              <Button type="button" variant="ghost" onClick={handleCancelEdit}>
+                Cancelar
+              </Button>
+            )}
+            <Button type="submit">
+              {editingIndex !== null ? "Actualizar" : "Comentar"}
+            </Button>
+          </div>
+        </form>
         {comments.map((comment) => {
           const parsedDate = parseISO(comment.createdAt);
           const formattedDate = format(parsedDate, "dd/MM/yyyy HH:mm");
@@ -154,45 +193,6 @@ export const Comment = ({
             </div>
           );
         })}
-
-        <form onSubmit={handleSubmit(onSubmit)} className="pt-2 comment-form">
-          <div className="mb-2 flex justify-between items-center">
-            {!isAnonymous && (
-              <Input
-                type="text"
-                placeholder="Tu nombre"
-                className="w-full"
-                {...register("name", { required: !isAnonymous })}
-              />
-            )}
-            <Button
-              variant="outline"
-              className="ml-2"
-              onClick={toggleAnonymous}
-              type="button"
-            >
-              {isAnonymous ? "Usar mi nombre" : "Comentar como Anónimo"}
-            </Button>
-          </div>
-          <div className="mb-2">
-            <Textarea
-              placeholder="Escribe un comentario..."
-              className="w-full resize-none"
-              rows={3}
-              {...register("comment", { required: true })}
-            />
-          </div>
-          <div className="text-right space-x-2">
-            {editingIndex !== null && (
-              <Button type="button" variant="ghost" onClick={handleCancelEdit}>
-                Cancelar
-              </Button>
-            )}
-            <Button type="submit">
-              {editingIndex !== null ? "Actualizar" : "Comentar"}
-            </Button>
-          </div>
-        </form>
 
         <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
           <AlertDialogContent>
